@@ -16,8 +16,11 @@ function loadProducts() {
 }
 
 function saveProducts() {
-  try { localStorage.setItem('stylenest_products', JSON.stringify(products)); }
-  catch (e) { alert('⚠️ Storage full! Images compress karein ya kuch products delete karein.'); }
+  try { 
+    localStorage.setItem('stylenest_products', JSON.stringify(products)); 
+  } catch (e) { 
+    alert('⚠️ Storage full! Images compress karein ya kuch products delete karein.'); 
+  }
 }
 
 loadProducts();
