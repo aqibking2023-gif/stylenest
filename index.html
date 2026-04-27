@@ -339,36 +339,36 @@
   <script>
     let cartCount = 0;
     
-    // Products display karein
-    function displayProducts() {
-      const container = document.getElementById('products-container');
-      
-      if (products.length === 0) {
-        container.innerHTML = '<div class="no-products">No products available yet. Check back soon!</div>';
-        return;
-      }
-      
-      container.innerHTML = products.map(product => `
-        <div class="product-card">
-          ${product.badge ? `<span class="badge">${product.badge}</span>` : ''}
-          <div class="product-image">
-            ${product.image ? 
-              `<img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='📷 ${product.name}'">` : 
-              `📷 ${product.name}`
-            }
-          </div>
-          <div class="product-info">
-            <div class="product-name">${product.name}</div>
-            <div class="rating">${getStars(product.rating || 5)} <small style="color:#999">(${product.reviews || 0})</small></div>
-            <div class="price">
-              <span class="sale-price">Rs.${product.price.toLocaleString()} PKR</span>
-              ${product.originalPrice ? `<span class="regular-price">Rs.${product.originalPrice.toLocaleString()} PKR</span>` : ''}
-            </div>
-            <button class="add-to-cart" onclick="addToCart('${product.name}')">Add to Cart</button>
-          </div>
+  // Products display karein
+function displayProducts() {
+  const container = document.getElementById('products-container');
+  
+  if (products.length === 0) {
+    container.innerHTML = '<div class="no-products">No products available yet. Check back soon!</div>';
+    return;
+  }
+  
+  container.innerHTML = products.map(product => `
+    <div class="product-card">
+      ${product.badge ? `<span class="badge">${product.badge}</span>` : ''}
+      <div class="product-image">
+        ${product.image ? 
+          `<img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='📷 ${product.name}'">` : 
+          `📷 ${product.name}`
+        }
+      </div>
+      <div class="product-info">
+        <div class="product-name">${product.name}</div>
+        <div class="rating">${getStars(product.rating || 5)} <small style="color:#999">(${product.reviews || 0})</small></div>
+        <div class="price">
+          <span class="sale-price">Rs.${product.price.toLocaleString()} PKR</span>
+          ${product.originalPrice ? `<span class="regular-price">Rs.${product.originalPrice.toLocaleString()} PKR</span>` : ''}
         </div>
-      `).join('');
-    }
+        <button class="add-to-cart" onclick="addToCart('${product.name}')">Add to Cart</button>
+      </div>
+    </div>
+  `).join('');
+}
     
     // Star rating
     function getStars(rating) {
