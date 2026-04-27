@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2563eb;        /* Blue Theme */
+      --primary: #2563eb;
       --secondary: #eff6ff;
       --text: #1e293b;
       --light-text: #64748b;
@@ -158,6 +158,13 @@
       justify-content: center;
       color: var(--light-text);
       font-size: 0.9rem;
+      overflow: hidden;
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
     .product-info {
@@ -223,6 +230,13 @@
       font-weight: 500;
     }
     
+    .no-products {
+      text-align: center;
+      padding: 3rem;
+      color: var(--light-text);
+      font-size: 1.2rem;
+    }
+    
     /* Footer */
     footer {
       background: var(--text);
@@ -274,16 +288,15 @@
 
   <!-- Header -->
   <header>
-    <a href="#" class="logo">
-      <img src="logo.png" alt="StyleNest">
+    <a href="index.html" class="logo">
+      <img src="logo.png" alt="StyleNest" onerror="this.style.display='none'">
       <span>StyleNest</span>
     </a>
     <nav>
-      <a href="#">Home</a>
-      <a href="#">New Arrivals</a>
-      <a href="#">Best Sellers</a>
-      <a href="#">Collections</a>
-      <a href="#">Contact</a>
+      <a href="index.html">Home</a>
+      <a href="#new-arrivals">New Arrivals</a>
+      <a href="#best-sellers">Best Sellers</a>
+      <a href="#contact">Contact</a>
     </nav>
     <div class="header-icons">
       <span>🔍</span>
@@ -296,101 +309,85 @@
   <section class="hero">
     <h1>Elegant Ethnic Wear for Every Occasion</h1>
     <p>Discover premium quality 3PC suits, kurtis & traditional fashion at unbeatable prices</p>
-    <button class="btn">Shop Now →</button>
+    <button class="btn" onclick="document.getElementById('new-arrivals').scrollIntoView({behavior: 'smooth'})">Shop Now →</button>
   </section>
 
   <!-- New Arrivals -->
-  <section class="section">
+  <section class="section" id="new-arrivals">
     <h2 class="section-title">✨ New Arrivals</h2>
-    <div class="products-grid" id="new-arrivals">
-      <!-- Products will be inserted by JavaScript -->
-    </div>
-  </section>
-
-  <!-- Best Sellers -->
-  <section class="section">
-    <h2 class="section-title">🔥 Best Sellers</h2>
-    <div class="products-grid" id="best-sellers">
-      <!-- Products will be inserted by JavaScript -->
+    <div class="products-grid" id="products-container">
+      <div class="no-products">Loading products...</div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer>
+  <footer id="contact">
     <p>© 2026 <strong>StyleNest.ink</strong> - Premium Ethnic Fashion</p>
     <p style="margin-top: 1rem;">
       <a href="#">Privacy Policy</a> | 
       <a href="#">Terms of Service</a> | 
-      <a href="#">Contact Us</a>
+      <a href="admin.html">Admin Login</a>
     </p>
     <p style="margin-top: 1rem; font-size: 0.9rem; color: #ccc;">
       🚚 Nationwide Delivery Available
     </p>
   </footer>
 
+  <!-- Data File -->
+  <script src="data.js"></script>
+  
   <script>
-    // Sample Product Data
-    const products = [
-      { id: 1, name: "Nazneen 3PC", price: 7490, original: 12000, rating: 5, reviews: 12, badge: "New" },
-      { id: 2, name: "Hazel 3PC", price: 7490, original: 12000, rating: 4.5, reviews: 8 },
-      { id: 3, name: "Sahar 3PC", price: 7490, original: 12000, rating: 5, reviews: 24, badge: "Sale" },
-      { id: 4, name: "Huraima 3PC", price: 4790, original: 8990, rating: 4.8, reviews: 31 },
-      { id: 5, name: "Ezzah 3PC", price: 4790, original: 8990, rating: 5, reviews: 19 },
-      { id: 6, name: "Rimsha 3PC", price: 5490, original: 10000, rating: 5, reviews: 45, badge: "Hot" },
-      { id: 7, name: "Marmot 2PC", price: 3490, original: 6990, rating: 4.7, reviews: 22 },
-      { id: 8, name: "Noor 3PC", price: 4990, original: 9990, rating: 4.9, reviews: 38 }
-    ];
-
-    // Generate Star Rating
-    function getStars(rating) {
-      const full = '★'.repeat(Math.floor(rating));
-      const half = rating % 1 >= 0.5 ? '½' : '';
-      const empty = '☆'.repeat(5 - Math.ceil(rating));
-      return `<span style="color:#ffc107">${full}${half}${empty}</span> <small>(${rating})</small>`;
-    }
-
-    // Create Product Card
-    function createProductCard(product) {
-      return `
+    let cartCount = 0;
+    
+    // Products display karein
+    function displayProducts() {
+      const container = document.getElementById('products-container');
+      
+      if (products.length === 0) {
+        container.innerHTML = '<div class="no-products">No products available yet. Check back soon!</div>';
+        return;
+      }
+      
+      container.innerHTML = products.map(product => `
         <div class="product-card">
           ${product.badge ? `<span class="badge">${product.badge}</span>` : ''}
-          <div class="product-image">📷 ${product.name} Image</div>
+          <div class="product-image">
+            ${product.image ? 
+              `<img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='📷 ${product.name}'">` : 
+              `📷 ${product.name}`
+            }
+          </div>
           <div class="product-info">
             <div class="product-name">${product.name}</div>
-            <div class="rating">${getStars(product.rating)} <small style="color:#999">(${product.reviews})</small></div>
+            <div class="rating">${getStars(product.rating || 5)} <small style="color:#999">(${product.reviews || 0})</small></div>
             <div class="price">
               <span class="sale-price">Rs.${product.price.toLocaleString()} PKR</span>
-              <span class="regular-price">Rs.${product.original.toLocaleString()} PKR</span>
+              ${product.originalPrice ? `<span class="regular-price">Rs.${product.originalPrice.toLocaleString()} PKR</span>` : ''}
             </div>
             <button class="add-to-cart" onclick="addToCart('${product.name}')">Add to Cart</button>
           </div>
         </div>
-      `;
+      `).join('');
     }
-
-    // Render Products
-    function renderProducts(containerId, productList) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = productList.map(p => createProductCard(p)).join('');
+    
+    // Star rating
+    function getStars(rating) {
+      const full = '★'.repeat(Math.floor(rating));
+      const empty = '☆'.repeat(5 - Math.floor(rating));
+      return `<span style="color:#ffc107">${full}${empty}</span>`;
     }
-
-    // Initialize
-    renderProducts('new-arrivals', products.slice(0, 4));
-    renderProducts('best-sellers', products.slice(4, 8));
-
-    // Cart Functionality
-    let cartCount = 0;
+    
+    // Add to cart
     function addToCart(productName) {
       cartCount++;
       document.getElementById('cart-count').textContent = `(${cartCount})`;
       alert(`✅ ${productName} added to cart!`);
     }
-
-    // Smooth Scroll for Buttons
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelector('#new-arrivals').scrollIntoView({ behavior: 'smooth' });
-      });
+    
+    // Page load par products dikhayein
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+      displayProducts();
     });
   </script>
 </body>
